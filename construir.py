@@ -25,7 +25,24 @@ MENU = [
     ("/ubicacion/", "Ubicación"),
     ("/preventa/", "Preventa"),
     ("/red-50-doctors/", "La red 50 Doctors"),
+    ("/noticias/", "Noticias"),
 ]
+
+# CEO 2026-10-11: «pon enlaces a Instagram y Facebook en todos lados». Las
+# cuentas del desarrollo de SLP (la de Instagram, comprobada; la de Facebook,
+# por el id de su página, que no depende del nombre corto).
+INSTAGRAM = "https://www.instagram.com/consultoriosenventa.slp/"
+FACEBOOK = "https://www.facebook.com/1326223403898883"
+
+ICONO_IG = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.2.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.2.4-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1.1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2Zm0 4.9a4.9 4.9 0 1 0 0 9.8 4.9 4.9 0 0 0 0-9.8Zm0 8.1a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm5.1-9.4a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 0 0 0-2.3Z"/></svg>'
+ICONO_FB = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M13.5 22v-8.2h2.8l.4-3.2h-3.2V8.5c0-.9.3-1.6 1.6-1.6h1.7V4.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.4H7.4v3.2h2.8V22h3.3Z"/></svg>'
+
+
+def redes(clase: str = "redes") -> str:
+    return (f'<span class="{clase}">'
+            f'<a href="{INSTAGRAM}" target="_blank" rel="noopener" aria-label="Instagram de 50 Doctors SLP">{ICONO_IG}<span>Instagram</span></a>'
+            f'<a href="{FACEBOOK}" target="_blank" rel="noopener" aria-label="Facebook de 50 Doctors SLP">{ICONO_FB}<span>Facebook</span></a>'
+            '</span>')
 
 DIRECCION = "Av. Paseo de los Horizontes 500, San Luis Potosí"
 
@@ -81,6 +98,7 @@ def cabecera(ruta: str) -> str:
   <div class="contenedor barra-dominio__fila">
     <a href="/" class="barra-dominio__nombre">consultoriosenventa<strong>SLP</strong>.mx</a>
     <span class="barra-dominio__lema">Consultorios médicos en venta · Torre con hospital · San Luis Potosí</span>
+    {redes("redes redes--barra")}
   </div>
 </div>
 <header class="cabecera">
@@ -107,6 +125,7 @@ PIE = f"""<section class="seccion seccion--gris" id="contacto">
       <a class="boton" data-formulario href="/#contacto">Pedir información</a>
       <a class="boton boton--borde-oscuro" data-whatsapp href="/#contacto">Escribir por WhatsApp</a>
     </div>
+    <p class="siguenos">Síguenos y entérate de los avances de la obra: {redes("redes redes--grande")}</p>
   </div>
 </section>
 
@@ -115,6 +134,7 @@ PIE = f"""<section class="seccion seccion--gris" id="contacto">
     <div>
       <img src="/assets/img/logo.png" alt="50 Doctors Hospital San Luis Potosí" width="160" height="45" class="pie__logo">
       <p>Hospital (en preventa): {HOSPITAL["direccion"]}.<br>Oficina de ventas: {OFICINA["direccion"]}.</p>
+      <p>{redes("redes redes--pie")}</p>
       <nav class="pie__menu" aria-label="Secciones">
         {" · ".join(f'<a href="{h}">{t}</a>' for h, t in MENU)}
       </nav>
@@ -176,7 +196,7 @@ def pagina(ruta: str, titulo: str, descripcion: str, cuerpo: str, ld: dict | Non
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=4">{ld_txt}
+<link rel="stylesheet" href="/assets/css/style.css?v=5">{ld_txt}
 </head>
 <body>
 {cabecera(ruta)}
@@ -451,6 +471,60 @@ PAGINAS["/red-50-doctors/"] = (
       <img src="/assets/img/red-torre-4.webp" alt="Torre médica 50 Doctors" loading="lazy">
     </div>
     <p class="centrado nota">Más información de la red en el sitio oficial: <a href="https://www.50doctors.mx" target="_blank" rel="noopener">50doctors.mx</a>.</p>
+  </div>
+</section>""",
+    None,
+)
+
+
+def _noticias() -> str:
+    """Tarjetas de lo publicado en Instagram (noticias.json).
+
+    Las saca del CRM (`meta_publicaciones`) un script aparte: texto sin
+    hashtags ni teléfonos y la miniatura guardada aquí, porque la de Instagram
+    caduca. Sin precios: se revisó al sacarlas."""
+    import html
+    from datetime import date
+    meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
+             "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+    items = json.loads((RAIZ / "noticias.json").read_text(encoding="utf-8"))
+    tarjetas = []
+    for n in items:
+        d = date.fromisoformat(n["fecha"])
+        titulo, texto = n["titulo"], n["texto"]
+        # «¡Atención, doctores…!» encabeza casi todas: como titular no dice
+        # nada, así que se usa la primera frase del texto.
+        if titulo.lower().startswith("¡atención") and texto:
+            import re
+            partes = re.split(r"(?<=[.!?…])\s+", texto, maxsplit=1)
+            titulo, texto = partes[0], (partes[1] if len(partes) > 1 else "")
+        tarjetas.append(f"""<article class="noticia">
+      <a href="{n['enlace']}" target="_blank" rel="noopener" class="noticia__foto">
+        <img src="{n['imagen']}" alt="" loading="lazy">
+      </a>
+      <div class="noticia__texto">
+        <p class="noticia__fecha">{d.day} de {meses[d.month - 1]} de {d.year}</p>
+        <h3>{html.escape(titulo)}</h3>
+        <p>{html.escape(texto)}</p>
+        <a class="enlace" href="{n['enlace']}" target="_blank" rel="noopener">Ver en Instagram →</a>
+      </div>
+    </article>""")
+    return "\n    ".join(tarjetas)
+
+
+PAGINAS["/noticias/"] = (
+    "Noticias del hospital 50 Doctors San Luis Potosí · Avances y novedades",
+    "Novedades del nuevo hospital 50 Doctors en San Luis Potosí: avances del proyecto, los consultorios en venta y la preventa.",
+    titular("Noticias", "Lo último del hospital 50 Doctors San Luis Potosí",
+            "Avances del proyecto, los consultorios y la preventa, tal como los contamos en nuestras redes.",
+            "torre-slp.webp", "Torre 50 Doctors SLP", 1600, 1313)
+    + f"""
+<section class="seccion">
+  <div class="contenedor">
+    <div class="noticias">
+    {_noticias()}
+    </div>
+    <p class="centrado siguenos">Todas las novedades, en nuestras redes: {redes("redes redes--grande")}</p>
   </div>
 </section>""",
     None,
