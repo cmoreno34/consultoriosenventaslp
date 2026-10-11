@@ -14,3 +14,11 @@ document.querySelectorAll("[data-formulario]").forEach(function (a) {
 document.querySelectorAll("[data-whatsapp]").forEach(function (a) {
   a.href = WHATSAPP; a.target = "_blank"; a.rel = "noopener";
 });
+
+// «Concertar una visita» (CEO 2026-10-11): el mismo formulario en modo CITA,
+// en el que el médico elige día y franja y entra en el CRM como solicitud de
+// cita para su comercial.
+document.querySelectorAll("[data-cita]").forEach(function (a) {
+  a.href = FORMULARIO + (FORMULARIO.indexOf("?") === -1 ? "?" : "&") + "kind=cita";
+  a.target = "_blank"; a.rel = "noopener";
+});

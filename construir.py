@@ -29,6 +29,48 @@ MENU = [
 
 DIRECCION = "Av. Paseo de los Horizontes 500, San Luis Potosí"
 
+# CEO 2026-10-11: «tenemos que poner la oficina y dónde está el hospital, que
+# es más adelante; que quede muy claro en el mapa». Son DOS sitios:
+#  · el TERRENO del hospital (número oficial 500, Fracc. Lomas del Lago, según
+#    el contrato de promesa), donde se construye la torre;
+#  · la OFICINA de ventas, en el 418, planta baja del edificio de Habi.
+# Los mapas son de Google y buscan el sitio por su dirección o por su nombre en
+# Google (el del hospital, «Hospital 50 Doctors», lo da por bueno el CEO).
+HOSPITAL = {
+    "nombre": "Hospital 50 Doctors (en construcción)",
+    "direccion": "Av. Paseo de los Horizontes 500, Fracc. Lomas del Lago, San Luis Potosí",
+    "lat": None, "lng": None,
+    # El punto de Google «Hospital 50 Doctors», que el CEO da por bueno.
+    "google": "Hospital 50 Doctors, Paseo de los Horizontes, San Luis Potosí",
+}
+OFICINA = {
+    "nombre": "Oficina de ventas",
+    "direccion": "Paseo de los Horizontes 418 (planta baja, edificio Habi), Horizontes, 78183 San Luis Potosí",
+    # La dirección tal como la da su ficha de Google (la del edificio de Habi).
+    # El código 5X93+8P, convertido a mano, caía en otra zona: no se usa.
+    "lat": None, "lng": None,
+    "google": "5X93+8P San Luis Potosí, S.L.P.",
+}
+
+
+def _maps(lugar: dict) -> str:
+    """Enlace «Cómo llegar» de Google Maps."""
+    from urllib.parse import quote
+    return "https://www.google.com/maps/dir/?api=1&destination=" + quote(lugar["google"])
+
+
+def _embed(lugar: dict) -> str:
+    """Mapa de Google insertable (sin clave): UNA marca por mapa."""
+    from urllib.parse import quote
+    return f"https://www.google.com/maps?q={quote(lugar['google'])}&z=16&output=embed"
+
+
+def _ruta() -> str:
+    """De la oficina al hospital: enseña que está más adelante en la avenida."""
+    from urllib.parse import quote
+    return ("https://www.google.com/maps/dir/?api=1&origin=" + quote(OFICINA["google"])
+            + "&destination=" + quote(HOSPITAL["google"]))
+
 
 def cabecera(ruta: str) -> str:
     enlaces = "\n".join(
@@ -72,7 +114,7 @@ PIE = f"""<section class="seccion seccion--gris" id="contacto">
   <div class="contenedor pie__fila">
     <div>
       <img src="/assets/img/logo.png" alt="50 Doctors Hospital San Luis Potosí" width="160" height="45" class="pie__logo">
-      <p>Torre médica 50 Doctors Hospital · {DIRECCION}, S.L.P.</p>
+      <p>Hospital (en construcción): {HOSPITAL["direccion"]}.<br>Oficina de ventas: {OFICINA["direccion"]}.</p>
       <nav class="pie__menu" aria-label="Secciones">
         {" · ".join(f'<a href="{h}">{t}</a>' for h, t in MENU)}
       </nav>
@@ -87,7 +129,7 @@ PIE = f"""<section class="seccion seccion--gris" id="contacto">
 <a class="flotante" data-whatsapp href="/#contacto" aria-label="Escribir por WhatsApp">
   <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3Zm0 23.6c-2 0-4-.6-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.6 10.6 0 1 1 16 26.6Zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.1-1.2 2.8 1.2 3.3 1.4 3.5 2.4 3.7 5.9 5.2c2.2.9 3 1 4.1.8.7-.1 1.9-.8 2.2-1.5s.3-1.4.2-1.5-.3-.2-.6-.3Z"/></svg>
 </a>
-<script src="/assets/js/enlaces.js?v=2"></script>"""
+<script src="/assets/js/enlaces.js?v=3"></script>"""
 
 LD_TORRE = {
     "@context": "https://schema.org",
@@ -134,7 +176,7 @@ def pagina(ruta: str, titulo: str, descripcion: str, cuerpo: str, ld: dict | Non
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=2">{ld_txt}
+<link rel="stylesheet" href="/assets/css/style.css?v=4">{ld_txt}
 </head>
 <body>
 {cabecera(ruta)}
@@ -325,27 +367,36 @@ PAGINAS["/consultorios/"] = (
 )
 
 PAGINAS["/ubicacion/"] = (
-    "Consultorios en Av. Paseo de los Horizontes, San Luis Potosí · Ubicación · 50 Doctors SLP",
-    "La torre médica 50 Doctors está en Av. Paseo de los Horizontes 500, San Luis Potosí, junto a Horizontes Residencial y Altolago. 350 cajones de estacionamiento.",
-    titular("Ubicación", DIRECCION,
-            "En la zona Horizontes, junto a Horizontes Residencial y Altolago. Fácil de llegar para tus pacientes, con 350 cajones de estacionamiento.",
+    "Ubicación del hospital y oficina de ventas · Consultorios 50 Doctors San Luis Potosí",
+    "El hospital 50 Doctors se construye en Av. Paseo de los Horizontes 500 (Lomas del Lago), San Luis Potosí. La oficina de ventas está en Paseo de los Horizontes 418.",
+    titular("Ubicación", "Dónde está el hospital y dónde te atendemos",
+            "Son dos puntos de la misma avenida: el terreno donde se construye el hospital y, un poco antes, nuestra oficina de ventas.",
             "torre-slp.webp", "Torre 50 Doctors en Av. Paseo de los Horizontes", 1600, 1313)
     + f"""
 <section class="seccion">
-  <div class="contenedor dos-col">
-    <div>
-      <h2>Cómo llegar</h2>
-      <p>La torre está sobre Av. Paseo de los Horizontes, con accesos por Av. Beato Marcelino Champagnat y Calle Las Palmas, en una de las zonas de mayor crecimiento de San Luis Potosí.</p>
-      <ul class="lista">
-        <li>Junto a Horizontes Residencial y Altolago</li>
-        <li>Acceso por Av. Beato Marcelino Champagnat</li>
-        <li>350 cajones de estacionamiento</li>
-        <li>Urgencias 24 h con acceso propio</li>
-      </ul>
-      <a class="enlace" href="https://www.google.com/maps/search/?api=1&query=Av.+Paseo+de+los+Horizontes+500,+San+Luis+Potos%C3%AD" target="_blank" rel="noopener">Abrir en Google Maps →</a>
-    </div>
-    <div class="mapa">
-      <iframe title="Mapa: {DIRECCION}" src="https://www.google.com/maps?q=Av.+Paseo+de+los+Horizontes+500,+San+Luis+Potos%C3%AD&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  <div class="contenedor">
+    <p class="centrado estrecho">El hospital y la oficina están en la <strong>misma avenida</strong>: la oficina queda antes y el terreno del hospital, más adelante.</p>
+    <p class="centrado"><a class="boton boton--borde-oscuro" href="{_ruta()}" target="_blank" rel="noopener">Ver el camino de la oficina al hospital</a></p>
+    <div class="lugares">
+      <article class="lugar lugar--hospital">
+        <div class="mapa"><iframe title="Mapa del hospital 50 Doctors" src="{_embed(HOSPITAL)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+        <p class="etiqueta">🏥 Aquí se construye el hospital</p>
+        <h2>{HOSPITAL["nombre"]}</h2>
+        <p>{HOSPITAL["direccion"]}.</p>
+        <p class="nota">Es el terreno de la torre: todavía no hay oficina en la obra.</p>
+        <a class="boton boton--borde-oscuro" href="{_maps(HOSPITAL)}" target="_blank" rel="noopener">Cómo llegar al terreno</a>
+      </article>
+      <article class="lugar lugar--oficina">
+        <div class="mapa"><iframe title="Mapa de la oficina de ventas" src="{_embed(OFICINA)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+        <p class="etiqueta">📍 Aquí te atendemos</p>
+        <h2>{OFICINA["nombre"]}</h2>
+        <p>{OFICINA["direccion"]}.</p>
+        <p class="nota">Te enseñamos planos, disponibilidad y condiciones. Pide información y te contactamos.</p>
+        <div class="botones">
+          <a class="boton" data-formulario href="/#contacto">Pedir información</a>
+          <a class="boton boton--borde-oscuro" href="{_maps(OFICINA)}" target="_blank" rel="noopener">Cómo llegar a la oficina</a>
+        </div>
+      </article>
     </div>
   </div>
 </section>""",
