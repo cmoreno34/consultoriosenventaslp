@@ -293,3 +293,10 @@ section[id] { scroll-margin-top: 76px; }
 .noticia__texto h3 { margin-top: 0; font-size: 1.05rem; }
 .noticia__texto p { color: var(--texto-suave); font-size: .95rem; }
 .noticia__fecha { font-size: .8rem !important; text-transform: uppercase; letter-spacing: .06em; color: var(--azul) !important; font-weight: 600; margin-bottom: .4em; }
+
+/* Preventa: fotos reales del terreno (11-oct). */
+.obra { display: grid; gap: 16px; margin-top: 26px; }
+@media (min-width: 800px) { .obra { grid-template-columns: repeat(3, 1fr); } }
+.obra figure { margin: 0; background: var(--blanco); border-radius: var(--radio); overflow: hidden; box-shadow: var(--sombra); }
+.obra img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.obra figcaption { padding: 10px 14px 14px; font-size: .9rem; color: var(--texto-suave); }

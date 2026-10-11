@@ -197,7 +197,7 @@ def pagina(ruta: str, titulo: str, descripcion: str, cuerpo: str, ld: dict | Non
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=5">{ld_txt}
+<link rel="stylesheet" href="/assets/css/style.css?v=6">{ld_txt}
 </head>
 <body>
 {cabecera(ruta)}
@@ -279,7 +279,7 @@ PAGINAS["/"] = (
     {tarjeta_enlace("/hospital/", "El hospital", "Quirófanos, urgencias 24 h, UCI, laboratorio e imagenología en la misma torre.", "quirofano.webp", "Quirófano 50 Doctors")}
     {tarjeta_enlace("/consultorios/", "Los consultorios", "De 22 a 32 m², sin divisiones para adaptarlos a tu especialidad.", "consultorio.webp", "Consultorio médico")}
     {tarjeta_enlace("/ubicacion/", "La ubicación", "Av. Paseo de los Horizontes 500, zona Horizontes, con 350 cajones.", "torre-slp.webp", "Torre 50 Doctors SLP")}
-    {tarjeta_enlace("/preventa/", "La preventa", "La obra está por comenzar: elige la mejor ubicación en la torre.", "sala-espera.webp", "Sala de espera")}
+    {tarjeta_enlace("/preventa/", "La preventa", "La obra está por comenzar: elige la mejor ubicación en la torre.", "valla-obra.webp", "Valla de obra en el terreno del hospital 50 Doctors SLP")}
     </div>
   </div>
 </section>
@@ -361,7 +361,7 @@ PAGINAS["/consultorios/"] = (
       <p class="nota">Los consultorios se entregan sin divisiones ni mobiliario. Te proponemos varias distribuciones según tu especialidad.</p>
     </div>
     <div class="galeria-mosaico">
-      <img src="/assets/img/sala-espera.webp" alt="Sala de espera en una torre 50 Doctors" width="1600" height="1040" loading="lazy">
+      <img src="/assets/img/maqueta.webp" alt="Maqueta de la torre 50 Doctors SLP en la oficina de ventas" width="478" height="850" loading="lazy">
       <img src="/assets/img/consultorio.webp" alt="Consultorio amueblado, ejemplo de distribución" width="914" height="1600" loading="lazy">
       <img src="/assets/img/pasillo-consultorios.webp" alt="Pasillo de consultorios" width="1082" height="1600" loading="lazy">
     </div>
@@ -442,6 +442,17 @@ PAGINAS["/preventa/"] = (
   </div>
 </section>
 <section class="seccion seccion--gris">
+  <div class="contenedor">
+    <h2 class="centrado">Así está hoy el terreno</h2>
+    <p class="centrado estrecho">Fotos reales de la obra en Av. Paseo de los Horizontes: la valla ya está puesta y se están haciendo los estudios del suelo.</p>
+    <div class="obra">
+      <figure><img src="/assets/img/valla-obra.webp" alt="Valla de obra «Venta de consultorios» en el terreno" width="848" height="480" loading="lazy"><figcaption>La valla de obra, en la avenida</figcaption></figure>
+      <figure><img src="/assets/img/estudio-suelo.webp" alt="Perforadora haciendo el estudio del suelo en el terreno" width="848" height="480" loading="lazy"><figcaption>Estudios del suelo, antes de arrancar la obra</figcaption></figure>
+      <figure><img src="/assets/img/terreno-aereo.webp" alt="Vista aérea del terreno del hospital y la avenida" width="848" height="480" loading="lazy"><figcaption>El terreno desde el aire</figcaption></figure>
+    </div>
+  </div>
+</section>
+<section class="seccion">
   <div class="contenedor estrecho">
     <h2 class="centrado">Cómo apartar tu consultorio</h2>
     <ol class="pasos">
