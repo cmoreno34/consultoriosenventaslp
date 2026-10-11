@@ -37,7 +37,7 @@ DIRECCION = "Av. Paseo de los Horizontes 500, San Luis Potosí"
 # Los mapas son de Google y buscan el sitio por su dirección o por su nombre en
 # Google (el del hospital, «Hospital 50 Doctors», lo da por bueno el CEO).
 HOSPITAL = {
-    "nombre": "Hospital 50 Doctors (en construcción)",
+    "nombre": "Hospital 50 Doctors (en preventa)",
     "direccion": "Av. Paseo de los Horizontes 500, Fracc. Lomas del Lago, San Luis Potosí",
     "lat": None, "lng": None,
     # El punto de Google «Hospital 50 Doctors», que el CEO da por bueno.
@@ -114,7 +114,7 @@ PIE = f"""<section class="seccion seccion--gris" id="contacto">
   <div class="contenedor pie__fila">
     <div>
       <img src="/assets/img/logo.png" alt="50 Doctors Hospital San Luis Potosí" width="160" height="45" class="pie__logo">
-      <p>Hospital (en construcción): {HOSPITAL["direccion"]}.<br>Oficina de ventas: {OFICINA["direccion"]}.</p>
+      <p>Hospital (en preventa): {HOSPITAL["direccion"]}.<br>Oficina de ventas: {OFICINA["direccion"]}.</p>
       <nav class="pie__menu" aria-label="Secciones">
         {" · ".join(f'<a href="{h}">{t}</a>' for h, t in MENU)}
       </nav>
