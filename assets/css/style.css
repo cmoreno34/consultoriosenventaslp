@@ -114,7 +114,8 @@ p { margin: 0 0 1em; }
 .cifras__fila { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px 12px; padding: 28px 0; text-align: center; }
 .cifras strong { display: block; font-family: "Montserrat", sans-serif; font-size: 1.6rem; font-weight: 800; }
 .cifras span { font-size: .9rem; color: #d6e0ff; }
-@media (min-width: 760px) { .cifras__fila { grid-template-columns: repeat(6, 1fr); } }
+@media (min-width: 760px) { .cifras__fila { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1050px) { .cifras__fila { grid-template-columns: repeat(7, 1fr); } }
 
 /* Secciones */
 .seccion { padding: 72px 0; }

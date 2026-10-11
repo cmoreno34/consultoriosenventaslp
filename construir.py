@@ -156,7 +156,7 @@ LD_TORRE = {
     "@context": "https://schema.org",
     "@type": "Place",
     "name": "Torre médica 50 Doctors Hospital San Luis Potosí",
-    "description": "Torre médica de 12 niveles con hospital propio, 192 consultorios médicos, 14 locales comerciales y 350 cajones de estacionamiento.",
+    "description": "Torre médica de 12 niveles con hospital propio, 192 consultorios médicos, 17 penthouses, 14 locales comerciales y 350 cajones de estacionamiento.",
     "url": DOMINIO + "/",
     "address": {
         "@type": "PostalAddress",
@@ -198,7 +198,7 @@ def pagina(ruta: str, titulo: str, descripcion: str, cuerpo: str, ld: dict | Non
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=6">{ld_txt}
+<link rel="stylesheet" href="/assets/css/style.css?v=7">{ld_txt}
 </head>
 <body>
 {cabecera(ruta)}
@@ -231,6 +231,7 @@ def titular(etiqueta: str, h1: str, sub: str, foto: str, alt: str, w: int, h: in
 CIFRAS = """<section class="cifras" aria-label="La torre en cifras">
   <div class="contenedor cifras__fila">
     <div><strong>192</strong><span>consultorios médicos</span></div>
+    <div><strong>17</strong><span>penthouses</span></div>
     <div><strong>Hospital</strong><span>en el mismo edificio</span></div>
     <div><strong>24 h</strong><span>urgencias</span></div>
     <div><strong>12</strong><span>niveles</span></div>
