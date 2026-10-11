@@ -20,8 +20,9 @@ HOY = "2026-10-11"
 
 MENU = [
     ("/", "Inicio"),
-    ("/hospital/", "Hospital"),
+    # CEO 2026-10-11: primero Consultorios, luego Hospital.
     ("/consultorios/", "Consultorios"),
+    ("/hospital/", "Hospital"),
     ("/ubicacion/", "Ubicación"),
     ("/preventa/", "Preventa"),
     ("/red-50-doctors/", "La red 50 Doctors"),
@@ -276,8 +277,8 @@ PAGINAS["/"] = (
     <p class="etiqueta centrado">Conoce el proyecto</p>
     <h2 class="centrado">Todo lo que necesita tu consulta, en un solo edificio</h2>
     <div class="tarjetas tarjetas--enlace">
-    {tarjeta_enlace("/hospital/", "El hospital", "Quirófanos, urgencias 24 h, UCI, laboratorio e imagenología en la misma torre.", "quirofano.webp", "Quirófano 50 Doctors")}
     {tarjeta_enlace("/consultorios/", "Los consultorios", "De 22 a 32 m², sin divisiones para adaptarlos a tu especialidad.", "consultorio.webp", "Consultorio médico")}
+    {tarjeta_enlace("/hospital/", "El hospital", "Quirófanos, urgencias 24 h, UCI, laboratorio e imagenología en la misma torre.", "quirofano.webp", "Quirófano 50 Doctors")}
     {tarjeta_enlace("/ubicacion/", "La ubicación", "Av. Paseo de los Horizontes 500, zona Horizontes, con 350 cajones.", "torre-slp.webp", "Torre 50 Doctors SLP")}
     {tarjeta_enlace("/preventa/", "La preventa", "La obra está por comenzar: elige la mejor ubicación en la torre.", "valla-obra.webp", "Valla de obra en el terreno del hospital 50 Doctors SLP")}
     </div>
