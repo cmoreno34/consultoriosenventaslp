@@ -27,6 +27,7 @@ MENU = [
     ("/preventa/", "Preventa"),
     ("/red-50-doctors/", "La red 50 Doctors"),
     ("/noticias/", "Noticias"),
+    ("/preguntas-frecuentes/", "Preguntas frecuentes"),
 ]
 
 # CEO 2026-10-11: «pon enlaces a Instagram y Facebook en todos lados». Las
@@ -198,7 +199,7 @@ def pagina(ruta: str, titulo: str, descripcion: str, cuerpo: str, ld: dict | Non
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=7">{ld_txt}
+<link rel="stylesheet" href="/assets/css/style.css?v=8">{ld_txt}
 </head>
 <body>
 {cabecera(ruta)}
@@ -542,6 +543,90 @@ PAGINAS["/noticias/"] = (
   </div>
 </section>""",
     None,
+)
+
+
+# ── Preguntas frecuentes (CEO 2026-10-12: «monta una hoja al final de
+#    preguntas frecuentes»). Respuestas cortas y concretas: es lo que citan
+#    Google, ChatGPT y Gemini al contestar. Sin precios, como toda la web.
+PREGUNTAS = [
+    ("¿Dónde está la torre 50 Doctors de San Luis Potosí?",
+     "El hospital se construye en Av. Paseo de los Horizontes 500, Fraccionamiento Lomas del Lago, "
+     "San Luis Potosí. La oficina de ventas está en Paseo de los Horizontes 418, planta baja del "
+     "edificio Habi, en la misma avenida."),
+    ("¿Qué tiene el hospital del edificio?",
+     "Tres quirófanos, 30 habitaciones, terapia intensiva (UCI), urgencias 24 horas con sala de "
+     "choque, sala de hemodinamia, laboratorio e imagenología, todo en los primeros niveles de la torre."),
+    ("¿Cuántos consultorios hay y de qué tamaño son?",
+     "La torre tiene 192 consultorios médicos, de 22 a 32 m², en los niveles 4 a 11, y 17 penthouses. "
+     "En planta baja hay 14 locales comerciales."),
+    ("¿Cómo se entregan los consultorios?",
+     "Sin divisiones ni mobiliario, para que los distribuyas según tu especialidad, con piso de "
+     "porcelanato, puerta de cristal templado, iluminación LED, tablaroca con aislante acústico y "
+     "térmico e instalaciones eléctrica, hidráulica, sanitaria y de telefonía."),
+    ("¿Hay estacionamiento para pacientes?",
+     "Sí: la torre tiene 350 cajones de estacionamiento."),
+    ("¿Qué servicios incluye la torre?",
+     "Seguridad privada 24/7 y videovigilancia, elevadores, mantenimiento y limpieza de áreas "
+     "comunes, seguro de la torre, administrador del edificio y sistema contra incendios."),
+    ("¿Para qué especialidades sirven?",
+     "Para cualquier especialidad médica, incluida la odontología. Como se entregan sin divisiones, "
+     "te proponemos distribuciones según lo que necesite tu consulta."),
+    ("¿En qué fase está el proyecto?",
+     "En preventa: la construcción está por comenzar. Entrar ahora permite elegir la mejor ubicación "
+     "dentro de la torre. Tu asesor te da el calendario de obra y de entrega."),
+    ("¿Cómo aparto mi consultorio?",
+     "Pides información, eliges con tu asesor el consultorio que encaja con tu especialidad y lo "
+     "apartas: quedan reservados la ubicación y las condiciones que pactes."),
+    ("¿Hay facilidades de pago?",
+     "Sí, hay planes de pago durante la obra. Tu asesor te explica las opciones disponibles en cada momento."),
+    ("¿Puedo comprar un consultorio como inversión?",
+     "Sí. Puedes usarlo tú o rentarlo a otro especialista: los médicos son inquilinos estables y de "
+     "largo plazo, y el hospital del edificio atrae pacientes."),
+    ("¿Puedo visitar la oficina de ventas?",
+     "Sí, en Paseo de los Horizontes 418, planta baja. Pide información y te contactamos para atenderte."),
+    ("¿Quién comercializa los consultorios?",
+     "Blue Insights 2011 SL, empresa comercializadora y agencia de marketing de los hospitales "
+     "50 Doctors en San Luis Potosí. La marca 50 FIFTY DOCTORS® es de su titular; el sitio oficial "
+     "de la red es 50doctors.mx."),
+]
+
+
+def _faq_html() -> str:
+    import html
+    return "\n".join(
+        f"""      <details class="faq">
+        <summary>{html.escape(p)}</summary>
+        <p>{html.escape(r)}</p>
+      </details>"""
+        for p, r in PREGUNTAS
+    )
+
+
+LD_FAQ = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {"@type": "Question", "name": p, "acceptedAnswer": {"@type": "Answer", "text": r}}
+        for p, r in PREGUNTAS
+    ],
+}
+
+PAGINAS["/preguntas-frecuentes/"] = (
+    "Preguntas frecuentes · Consultorios médicos en venta en San Luis Potosí · 50 Doctors SLP",
+    "Dónde está la torre, qué tiene el hospital, tamaños de los consultorios, estacionamiento, "
+    "servicios, preventa y cómo apartar: las respuestas sobre los consultorios 50 Doctors en San Luis Potosí.",
+    titular("Preguntas frecuentes", "Todo lo que nos preguntan los médicos",
+            "Ubicación, hospital, consultorios, preventa y cómo apartar, en respuestas cortas.",
+            "torre-slp.webp", "Torre 50 Doctors SLP", 1600, 1313)
+    + f"""
+<section class="seccion">
+  <div class="contenedor estrecho">
+{_faq_html()}
+    <p class="centrado nota">¿No está tu pregunta? Pide información o escríbenos por WhatsApp y te respondemos.</p>
+  </div>
+</section>""",
+    LD_FAQ,
 )
 
 

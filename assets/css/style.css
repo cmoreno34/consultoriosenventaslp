@@ -301,3 +301,11 @@ section[id] { scroll-margin-top: 76px; }
 .obra figure { margin: 0; background: var(--blanco); border-radius: var(--radio); overflow: hidden; box-shadow: var(--sombra); }
 .obra img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
 .obra figcaption { padding: 10px 14px 14px; font-size: .9rem; color: var(--texto-suave); }
+
+/* Preguntas frecuentes (12-oct). */
+.faq { background: var(--blanco); border: 1px solid var(--borde); border-radius: var(--radio); margin-bottom: 10px; box-shadow: var(--sombra); }
+.faq summary { cursor: pointer; padding: 16px 48px 16px 18px; font-family: "Montserrat", sans-serif; font-weight: 700; position: relative; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: var(--azul); font-size: 1.4rem; font-weight: 600; }
+.faq[open] summary::after { content: "–"; }
+.faq p { padding: 0 18px 16px; margin: 0; color: var(--texto-suave); }
