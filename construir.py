@@ -521,7 +521,7 @@ def _noticias() -> str:
         <p class="noticia__fecha">{d.day} de {meses[d.month - 1]} de {d.year}</p>
         <h3>{html.escape(titulo)}</h3>
         <p>{html.escape(texto)}</p>
-        <a class="enlace" href="{n['enlace']}" target="_blank" rel="noopener">Ver en Instagram →</a>
+        <a class="enlace" href="{n['enlace']}" target="_blank" rel="noopener">Ver en {'Facebook' if n.get('red') == 'facebook' else 'Instagram'} →</a>
       </div>
     </article>""")
     return "\n    ".join(tarjetas)
@@ -636,8 +636,14 @@ def construir() -> None:
         destino.parent.mkdir(parents=True, exist_ok=True)
         destino.write_text(pagina(ruta, titulo, desc, cuerpo, ld), encoding="utf-8")
         print("ok", ruta)
+    # Noticias cambia sola (actualizar_noticias.py): su fecha es la de la
+    # última noticia, para que Google vuelva a pasar cuando hay algo nuevo.
+    ultima = max(
+        [n["fecha"] for n in json.loads((RAIZ / "noticias.json").read_text(encoding="utf-8"))]
+        + [HOY]
+    )
     urls = "\n".join(
-        f"  <url><loc>{DOMINIO}{r}</loc><lastmod>{HOY}</lastmod>"
+        f"  <url><loc>{DOMINIO}{r}</loc><lastmod>{ultima if r == '/noticias/' else HOY}</lastmod>"
         f"<priority>{'1.0' if r == '/' else '0.8'}</priority></url>"
         for r in PAGINAS
     )

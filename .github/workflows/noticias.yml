@@ -1,0 +1,44 @@
+# Noticias de Instagram y Facebook → sección Noticias de la web.
+#
+# CEO 2026-10-15: «hazlo automáticamente cuando publiquemos en Instagram o
+# Facebook». Pasa cada 6 horas a recoger la lista del CRM; el CRM solo pregunta
+# a Meta cada 2 o 3 días y se enciende/apaga en Admin → Envíos automáticos →
+# «Noticias de la web». Sin novedades no commitea nada.
+name: Noticias de Instagram y Facebook
+
+on:
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: noticias
+  cancel-in-progress: false
+
+jobs:
+  noticias:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - run: python actualizar_noticias.py
+      - name: Publicar si hay novedades
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then echo "Nada que publicar."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add noticias.json assets/img/noticias sitemap.xml index.html */index.html
+          git commit -m "Noticias: lo nuevo de Instagram y Facebook"
+          git push
+          # Con el token de Actions, el push puede no disparar la publicación
+          # de GitHub Pages: se pide a mano.
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" || true
