@@ -22,3 +22,29 @@ document.querySelectorAll("[data-cita]").forEach(function (a) {
   a.href = FORMULARIO + (FORMULARIO.indexOf("?") === -1 ? "?" : "&") + "kind=cita";
   a.target = "_blank"; a.rel = "noopener";
 });
+
+// Contador de visitas (CEO 2026-10-15: «monta el contador de visitas de la web
+// dentro del CRM, por día, por página y de dónde vienen»). Cada página avisa al
+// CRM al abrirse; las cifras salen en el CRM, Campañas → Análisis → Web.
+//
+//  · Sin cookies ni datos de la persona: solo la página, de dónde viene y si
+//    es la primera página de la visita (`sessionStorage`, que se borra al
+//    cerrar la pestaña).
+//  · `sendBeacon` con texto plano: no frena la página y no necesita CORS.
+(function () {
+  var CRM = "https://fifty-doctors-crm-805505290896.us-central1.run.app/api/v1/web-publica/visita";
+  if (!navigator.sendBeacon) return;
+  var primera = true;
+  try {
+    primera = !sessionStorage.getItem("cv_visita");
+    sessionStorage.setItem("cv_visita", "1");
+  } catch (e) { /* modo privado: cuenta como primera */ }
+  var utm = "";
+  try { utm = new URLSearchParams(location.search).get("utm_source") || ""; } catch (e) {}
+  var datos = JSON.stringify({
+    p: location.pathname, r: document.referrer || "", u: utm, e: primera ? 1 : 0
+  });
+  try {
+    navigator.sendBeacon(CRM, new Blob([datos], { type: "text/plain;charset=UTF-8" }));
+  } catch (e) {}
+})();
