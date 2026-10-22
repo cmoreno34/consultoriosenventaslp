@@ -40,7 +40,13 @@ document.querySelectorAll("[data-cita]").forEach(function (a) {
     sessionStorage.setItem("cv_visita", "1");
   } catch (e) { /* modo privado: cuenta como primera */ }
   var utm = "";
-  try { utm = new URLSearchParams(location.search).get("utm_source") || ""; } catch (e) {}
+  try {
+    var q = new URLSearchParams(location.search);
+    utm = q.get("utm_source") || "";
+    // Clic en un anuncio de Google Ads: Google añade gclid (o gbraid/wbraid en
+    // iPhone). Así el CRM separa anuncio de búsqueda normal (CEO 2026-10-22).
+    if (q.get("gclid") || q.get("gbraid") || q.get("wbraid")) utm = "google_ads";
+  } catch (e) {}
   var datos = JSON.stringify({
     p: location.pathname, r: document.referrer || "", u: utm, e: primera ? 1 : 0
   });
