@@ -8,11 +8,36 @@ var FORMULARIO = "https://ventaconsultorios-slp.web.app/kbwYiT3V";
 var WHATSAPP = "https://wa.me/524444283473?text=" + encodeURIComponent(
   "Hola, vengo de la web consultoriosenventaslp.mx y quiero información de los consultorios.");
 
+// Google Ads (CEO 2026-11-02, cuenta 209-593-1827). Quien llega de un anuncio
+// trae `gclid` en la URL; se guarda para la pestaña (sessionStorage) y se pasa al
+// formulario del CRM, así el lead queda unido al clic aunque cambie de página.
+var GOOGLE_ADS = "AW-18551963654";
+// Etiquetas de las acciones de conversión de Google Ads (Objetivos →
+// Conversiones). Vacía = esa conversión aún no existe y no se manda nada.
+var CONVERSIONES = { formulario: "", cita: "", whatsapp: "" };
+
+var GCLID = "";
+try {
+  var _q = new URLSearchParams(location.search);
+  GCLID = _q.get("gclid") || _q.get("gbraid") || _q.get("wbraid") || "";
+  if (GCLID) sessionStorage.setItem("cv_gclid", GCLID);
+  else GCLID = sessionStorage.getItem("cv_gclid") || "";
+} catch (e) {}
+if (GCLID) FORMULARIO += (FORMULARIO.indexOf("?") === -1 ? "?" : "&") + "gclid=" + encodeURIComponent(GCLID);
+
+function conversion(tipo) {
+  var etiqueta = CONVERSIONES[tipo];
+  if (!etiqueta || typeof gtag !== "function") return;
+  try { gtag("event", "conversion", { send_to: GOOGLE_ADS + "/" + etiqueta }); } catch (e) {}
+}
+
 document.querySelectorAll("[data-formulario]").forEach(function (a) {
   a.href = FORMULARIO; a.target = "_blank"; a.rel = "noopener";
+  a.addEventListener("click", function () { conversion("formulario"); });
 });
 document.querySelectorAll("[data-whatsapp]").forEach(function (a) {
   a.href = WHATSAPP; a.target = "_blank"; a.rel = "noopener";
+  a.addEventListener("click", function () { conversion("whatsapp"); });
 });
 
 // «Concertar una visita» (CEO 2026-10-11): el mismo formulario en modo CITA,
@@ -21,6 +46,7 @@ document.querySelectorAll("[data-whatsapp]").forEach(function (a) {
 document.querySelectorAll("[data-cita]").forEach(function (a) {
   a.href = FORMULARIO + (FORMULARIO.indexOf("?") === -1 ? "?" : "&") + "kind=cita";
   a.target = "_blank"; a.rel = "noopener";
+  a.addEventListener("click", function () { conversion("cita"); });
 });
 
 // Contador de visitas (CEO 2026-10-15: «monta el contador de visitas de la web
