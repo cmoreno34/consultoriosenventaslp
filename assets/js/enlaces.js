@@ -14,7 +14,11 @@ var WHATSAPP = "https://wa.me/524444283473?text=" + encodeURIComponent(
 var GOOGLE_ADS = "AW-18551963654";
 // Etiquetas de las acciones de conversión de Google Ads (Objetivos →
 // Conversiones). Vacía = esa conversión aún no existe y no se manda nada.
-var CONVERSIONES = { formulario: "", cita: "", whatsapp: "" };
+var CONVERSIONES = {
+  formulario: "yISCCP2u0bAdEIaAoo5F",  // Pedir información (web)
+  cita: "YZBpCPiv0bAdEIaAoo5F",        // Concertar visita (web)
+  whatsapp: "OmuxCPuv0bAdEIaAoo5F"     // WhatsApp (web)
+};
 
 var GCLID = "";
 try {
