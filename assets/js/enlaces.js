@@ -16,7 +16,7 @@ var GOOGLE_ADS = "AW-18551963654";
 // Conversiones). Vacía = esa conversión aún no existe y no se manda nada.
 var CONVERSIONES = {
   formulario: "yISCCP2u0bAdEIaAoo5F",  // Pedir información (web)
-  cita: "YZBpCPiv0bAdEIaAoo5F",        // Concertar visita (web)
+  cita: "",  // «Concertar visita» quitada (CEO 2026-11-02): la web no tiene ese botón
   whatsapp: "OmuxCPuv0bAdEIaAoo5F"     // WhatsApp (web)
 };
 
