@@ -176,6 +176,7 @@ p { margin: 0 0 1em; }
 @media (min-width: 900px) { .pie__fila { grid-template-columns: 1fr 1.6fr; } }
 .pie__logo { background: var(--blanco); padding: 8px 12px; border-radius: 10px; margin-bottom: 12px; }
 .pie__legal p { margin-bottom: .8em; }
+.pie__sello { display: block; width: 220px; height: auto; margin-bottom: 14px; border-radius: 10px; }
 
 /* WhatsApp flotante */
 .flotante {
