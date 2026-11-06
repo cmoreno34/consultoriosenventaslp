@@ -4,7 +4,7 @@ Uso:  python construir.py
 
 Cabecera, pie, botones y metadatos salen de aquí: cambiar el menú o el pie
 es cambiarlo UNA vez. Cada página es una carpeta con su index.html, para
-tener direcciones limpias (/hospital/, /preventa/…) que es lo que mejor
+tener direcciones limpias (/hospital/, /venta-y-promociones/…) que es lo que mejor
 posiciona en Google.
 
 Los dos destinos de todos los botones están en assets/js/enlaces.js.
@@ -16,7 +16,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).parent
 DOMINIO = "https://consultoriosenventaslp.mx"
-HOY = "2026-10-11"
+HOY = "2026-11-06"
 
 MENU = [
     ("/", "Inicio"),
@@ -24,7 +24,9 @@ MENU = [
     ("/consultorios/", "Consultorios"),
     ("/hospital/", "Hospital"),
     ("/ubicacion/", "Ubicación"),
-    ("/preventa/", "Preventa"),
+    # CEO 2026-11-06: fuera «preventa»; la página pasa a «Venta y promociones»
+    # (la vieja /preventa/ redirige aquí, ver REDIRECCIONES).
+    ("/venta-y-promociones/", "Venta y promociones"),
     ("/red-50-doctors/", "La red 50 Doctors"),
     ("/noticias/", "Noticias"),
     ("/preguntas-frecuentes/", "Preguntas frecuentes"),
@@ -56,7 +58,7 @@ DIRECCION = "Av. Paseo de los Horizontes 500, San Luis Potosí"
 # Los mapas son de Google y buscan el sitio por su dirección o por su nombre en
 # Google (el del hospital, «Hospital 50 Doctors», lo da por bueno el CEO).
 HOSPITAL = {
-    "nombre": "Hospital 50 Doctors (en preventa)",
+    "nombre": "Hospital 50 Doctors",
     "direccion": "Av. Paseo de los Horizontes 500, Fracc. Lomas del Lago, San Luis Potosí",
     "lat": None, "lng": None,
     # El punto de Google «Hospital 50 Doctors», que el CEO da por bueno.
@@ -122,7 +124,7 @@ def cabecera(ruta: str) -> str:
 PIE = f"""<section class="seccion seccion--gris" id="contacto">
   <div class="contenedor contacto">
     <h2>Pide información de los consultorios</h2>
-    <p>Déjanos tus datos y un asesor te contacta por WhatsApp con la disponibilidad, los planos y las condiciones de la preventa.</p>
+    <p>Déjanos tus datos y un asesor te contacta por WhatsApp con la disponibilidad, los planos y las promociones vigentes.</p>
     <div class="botones centrar">
       <a class="boton" data-formulario href="/#contacto">Pedir información</a>
       <a class="boton boton--borde-oscuro" data-whatsapp href="/#contacto">Escribir por WhatsApp</a>
@@ -135,7 +137,7 @@ PIE = f"""<section class="seccion seccion--gris" id="contacto">
   <div class="contenedor pie__fila">
     <div>
       <img src="/assets/img/logo.png" alt="50 Doctors Hospital San Luis Potosí" width="160" height="45" class="pie__logo">
-      <p>Hospital (en preventa): {HOSPITAL["direccion"]}.<br>Oficina de ventas: {OFICINA["direccion"]}.</p>
+      <p>Hospital: {HOSPITAL["direccion"]}.<br>Oficina de ventas: {OFICINA["direccion"]}.</p>
       <p>{redes("redes redes--pie")}</p>
       <nav class="pie__menu" aria-label="Secciones">
         {" · ".join(f'<a href="{h}">{t}</a>' for h, t in MENU)}
@@ -152,7 +154,7 @@ PIE = f"""<section class="seccion seccion--gris" id="contacto">
 <a class="flotante" data-whatsapp href="/#contacto" aria-label="Escribir por WhatsApp">
   <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3Zm0 23.6c-2 0-4-.6-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.6 10.6 0 1 1 16 26.6Zm5.8-7.9c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.7 8.7 0 0 1-4.3-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.1-1.2 2.8 1.2 3.3 1.4 3.5 2.4 3.7 5.9 5.2c2.2.9 3 1 4.1.8.7-.1 1.9-.8 2.2-1.5s.3-1.4.2-1.5-.3-.2-.6-.3Z"/></svg>
 </a>
-<script src="/assets/js/enlaces.js?v=9"></script>"""
+<script src="/assets/js/enlaces.js?v=10"></script>"""
 
 LD_TORRE = {
     "@context": "https://schema.org",
@@ -209,13 +211,14 @@ def pagina(ruta: str, titulo: str, descripcion: str, cuerpo: str, ld: dict | Non
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/style.css?v=9">{ld_txt}
+<link rel="stylesheet" href="/assets/css/style.css?v=10">{ld_txt}
 </head>
 <body>
 {cabecera(ruta)}
 <main>
 {cuerpo}
 </main>
+{_promo_flotante(ruta)}
 {PIE}
 </body>
 </html>
@@ -263,18 +266,112 @@ def tarjeta_enlace(href: str, titulo: str, texto: str, foto: str, alt: str) -> s
     </a>"""
 
 
+# ── Promoción vigente (CEO 2026-11-06) ──────────────────────────────────
+# «¡El mejor fin!»: destacada en Venta y promociones y con un anuncio flotante
+# a la derecha en TODAS las demás páginas, que lleva a ella. Se apaga sola: al
+# construir después de `hasta` no sale, y el navegador la quita a las 00:00 de
+# México del día siguiente aunque nadie vuelva a construir. Para la próxima
+# promo: cambiar este bloque (y la imagen) y volver a construir; PROMO = None
+# la quita.
+PAGINA_PROMOS = "/venta-y-promociones/"
+PROMO: dict | None = {
+    "nombre": "¡El mejor fin!",
+    "hasta": "2026-11-20",
+    "vigencia": "Del 6 al 20 de noviembre de 2026",
+    "imagen": "promo-mejor-fin.webp",       # 676×868
+    "mini": "promo-mejor-fin-mini.webp",    # 360×462, la del flotante
+    "alt": "Promoción ¡El mejor fin!: 15% de enganche con 30 meses sin intereses o 0% de enganche con 24 meses sin intereses. Vigencia del 6 al 20 de noviembre de 2026.",
+    "planes": [
+        ("15%", "de enganche con", "30 meses sin intereses"),
+        ("0%", "de enganche con", "24 meses sin intereses"),
+    ],
+    "corto": "0% enganche",   # el texto del flotante en el móvil
+}
+
+
+def _promo_vigente() -> bool:
+    from datetime import date
+    return bool(PROMO) and date.today().isoformat() <= PROMO["hasta"]
+
+
+def _promo_fin_js() -> str:
+    """Primer instante en que ya NO vale: 00:00 de México del día siguiente."""
+    from datetime import date, timedelta
+    sig = date.fromisoformat(PROMO["hasta"]) + timedelta(days=1)
+    return f"{sig.isoformat()}T00:00:00-06:00"
+
+
+def _promo_destacada() -> str:
+    if not _promo_vigente():
+        return ""
+    planes = '\n        <p class="promo__o">o</p>\n'.join(
+        f'        <div class="promo__plan"><strong>{p}</strong><span>{a}<b>{b}</b></span></div>'
+        for p, a, b in PROMO["planes"]
+    )
+    return f"""
+<section class="seccion promo" id="promocion" data-promo-hasta="{_promo_fin_js()}">
+  <div class="contenedor promo__fila">
+    <img class="promo__img" src="/assets/img/{PROMO['imagen']}" alt="{PROMO['alt']}" width="676" height="868">
+    <div class="promo__texto">
+      <p class="etiqueta">Promoción vigente</p>
+      <h2>{PROMO['nombre']}</h2>
+      <div class="promo__planes">
+{planes}
+      </div>
+      <p class="nota">{PROMO['vigencia']}. Términos y condiciones con tu asesor comercial 50 Doctors.</p>
+      <div class="botones">
+        <a class="boton" data-formulario href="/#contacto">Quiero la promoción</a>
+        <a class="boton boton--borde-oscuro" data-whatsapp href="/#contacto">Preguntar por WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>"""
+
+
+def _promo_flotante(ruta: str) -> str:
+    """Anuncio a la derecha en todas las páginas menos la de la promo."""
+    if ruta == PAGINA_PROMOS or not _promo_vigente():
+        return ""
+    return f"""
+<div class="promo-flotante" data-promo-hasta="{_promo_fin_js()}" hidden>
+  <a href="{PAGINA_PROMOS}#promocion" aria-label="{PROMO['nombre']} {PROMO['vigencia'].lower()}: ver la promoción">
+    <img class="promo-flotante__img" src="/assets/img/{PROMO['mini']}" alt="" width="360" height="462">
+    <span class="promo-flotante__movil"><b>{PROMO['nombre']}</b> {PROMO["corto"]} →</span>
+  </a>
+  <button type="button" class="promo-flotante__cerrar" aria-label="Cerrar la promoción">×</button>
+</div>"""
+
+
+# Direcciones viejas que Google ya conoce: una página mínima que manda a la
+# nueva (GitHub Pages no hace redirecciones de servidor).
+REDIRECCIONES = {"/preventa/": PAGINA_PROMOS}
+
+
+def _redireccion(destino: str) -> str:
+    url = DOMINIO + destino
+    return f"""<!doctype html>
+<html lang="es-MX"><head><meta charset="utf-8">
+<title>Venta y promociones · 50 Doctors SLP</title>
+<link rel="canonical" href="{url}">
+<meta name="robots" content="noindex, follow">
+<meta http-equiv="refresh" content="0; url={destino}">
+<script>location.replace("{destino}" + location.hash);</script>
+</head><body><p>Esta página se ha movido a <a href="{destino}">Venta y promociones</a>.</p></body></html>
+"""
+
+
 # ── Páginas ──────────────────────────────────────────────────────────────
 
 PAGINAS: dict[str, tuple[str, str, str, dict | None]] = {}
 
 PAGINAS["/"] = (
     "Consultorios médicos en venta en San Luis Potosí · Torre con hospital · 50 Doctors SLP",
-    "Consultorios médicos en venta en San Luis Potosí, en una torre con hospital propio: quirófanos, urgencias 24 h, terapia intensiva e imagenología. Av. Paseo de los Horizontes 500. Preventa.",
+    "Consultorios médicos en venta en San Luis Potosí, en una torre con hospital propio: quirófanos, urgencias 24 h, terapia intensiva e imagenología. Av. Paseo de los Horizontes 500. Venta y promociones.",
     f"""<section class="portada">
   <img class="portada__foto" src="/assets/img/torre-slp.webp" alt="Render de la torre médica 50 Doctors Hospital en San Luis Potosí" width="1600" height="1313" fetchpriority="high">
   <div class="portada__velo"></div>
   <div class="contenedor portada__texto">
-    <p class="etiqueta">Preventa · San Luis Potosí</p>
+    <p class="etiqueta">Venta y promociones · San Luis Potosí</p>
     <h1>Consultorios médicos en venta en San Luis Potosí, en una torre con hospital propio</h1>
     <p class="portada__sub">Quirófanos, urgencias 24 h y terapia intensiva en tu mismo edificio. {DIRECCION}. La construcción está por comenzar: es el momento de elegir tu ubicación.</p>
     <div class="botones">
@@ -292,7 +389,7 @@ PAGINAS["/"] = (
     {tarjeta_enlace("/consultorios/", "Los consultorios", "De 22 a 32 m², sin divisiones para adaptarlos a tu especialidad.", "consultorio.webp", "Consultorio médico")}
     {tarjeta_enlace("/hospital/", "El hospital", "Quirófanos, urgencias 24 h, UCI, laboratorio e imagenología en la misma torre.", "quirofano.webp", "Quirófano 50 Doctors")}
     {tarjeta_enlace("/ubicacion/", "La ubicación", "Av. Paseo de los Horizontes 500, zona Horizontes, con 350 cajones.", "torre-slp.webp", "Torre 50 Doctors SLP")}
-    {tarjeta_enlace("/preventa/", "La preventa", "La obra está por comenzar: elige la mejor ubicación en la torre.", "valla-obra.webp", "Valla de obra en el terreno del hospital 50 Doctors SLP")}
+    {tarjeta_enlace("/venta-y-promociones/", "Venta y promociones", "Las promociones vigentes y cómo apartar tu consultorio.", "valla-obra.webp", "Valla de obra en el terreno del hospital 50 Doctors SLP")}
     </div>
   </div>
 </section>
@@ -437,16 +534,17 @@ PAGINAS["/ubicacion/"] = (
     LD_TORRE,
 )
 
-PAGINAS["/preventa/"] = (
-    "Preventa de consultorios médicos en San Luis Potosí · 50 Doctors SLP",
-    "Preventa de consultorios en la torre médica 50 Doctors de San Luis Potosí. La construcción está por comenzar: elige la mejor ubicación y aparta con facilidades de pago.",
-    titular("Preventa", "La construcción está por comenzar",
-            "Entrar ahora te permite elegir la mejor ubicación dentro de la torre y apartar tu consultorio en etapa de preventa.",
-            "torre-slp.webp", "Torre 50 Doctors SLP en preventa", 1600, 1313)
+PAGINAS[PAGINA_PROMOS] = (
+    "Venta de consultorios médicos y promociones en San Luis Potosí · 50 Doctors SLP",
+    "Consultorios médicos en venta en la torre 50 Doctors de San Luis Potosí, con promociones de enganche y meses sin intereses. Elige la mejor ubicación y aparta con facilidades de pago.",
+    titular("Venta y promociones", "Tu consultorio, a tu alcance",
+            "La construcción está por comenzar: comprar ahora te permite elegir la mejor ubicación dentro de la torre y aprovechar las promociones vigentes.",
+            "torre-slp.webp", "Torre 50 Doctors SLP", 1600, 1313)
+    + _promo_destacada()
     + """
 <section class="seccion">
   <div class="contenedor">
-    <h2 class="centrado">Por qué entrar en preventa</h2>
+    <h2 class="centrado">Por qué comprar ahora</h2>
     <div class="tarjetas">
       <article class="tarjeta"><h3>Eliges ubicación</h3><p>Al principio hay más consultorios donde elegir: piso, orientación, vistas y cercanía a elevadores.</p></article>
       <article class="tarjeta"><h3>Apartas y congelas</h3><p>Al apartar se respetan la ubicación y las condiciones que pactas con tu asesor.</p></article>
@@ -539,9 +637,9 @@ def _noticias() -> str:
 
 PAGINAS["/noticias/"] = (
     "Noticias del hospital 50 Doctors San Luis Potosí · Avances y novedades",
-    "Novedades del nuevo hospital 50 Doctors en San Luis Potosí: avances del proyecto, los consultorios en venta y la preventa.",
+    "Novedades del nuevo hospital 50 Doctors en San Luis Potosí: avances del proyecto, los consultorios en venta y las promociones.",
     titular("Noticias", "Lo último del hospital 50 Doctors San Luis Potosí",
-            "Avances del proyecto, los consultorios y la preventa, tal como los contamos en nuestras redes.",
+            "Avances del proyecto, los consultorios y las promociones, tal como los contamos en nuestras redes.",
             "torre-slp.webp", "Torre 50 Doctors SLP", 1600, 1313)
     + f"""
 <section class="seccion">
@@ -583,13 +681,16 @@ PREGUNTAS = [
      "Para cualquier especialidad médica, incluida la odontología. Como se entregan sin divisiones, "
      "te proponemos distribuciones según lo que necesite tu consulta."),
     ("¿En qué fase está el proyecto?",
-     "En preventa: la construcción está por comenzar. Entrar ahora permite elegir la mejor ubicación "
-     "dentro de la torre. Tu asesor te da el calendario de obra y de entrega."),
+     "Los consultorios ya están a la venta y la construcción está por comenzar. Comprar ahora permite "
+     "elegir la mejor ubicación dentro de la torre. Tu asesor te da el calendario de obra y de entrega."),
     ("¿Cómo aparto mi consultorio?",
      "Pides información, eliges con tu asesor el consultorio que encaja con tu especialidad y lo "
      "apartas: quedan reservados la ubicación y las condiciones que pactes."),
     ("¿Hay facilidades de pago?",
      "Sí, hay planes de pago durante la obra. Tu asesor te explica las opciones disponibles en cada momento."),
+    ("¿Hay promociones?",
+     "Sí, hay promociones por temporada, con enganche reducido y meses sin intereses. Las vigentes "
+     "están en la página «Venta y promociones»; los términos y condiciones, con tu asesor comercial."),
     ("¿Puedo comprar un consultorio como inversión?",
      "Sí. Puedes usarlo tú o rentarlo a otro especialista: los médicos son inquilinos estables y de "
      "largo plazo, y el hospital del edificio atrae pacientes."),
@@ -625,9 +726,9 @@ LD_FAQ = {
 PAGINAS["/preguntas-frecuentes/"] = (
     "Preguntas frecuentes · Consultorios médicos en venta en San Luis Potosí · 50 Doctors SLP",
     "Dónde está la torre, qué tiene el hospital, tamaños de los consultorios, estacionamiento, "
-    "servicios, preventa y cómo apartar: las respuestas sobre los consultorios 50 Doctors en San Luis Potosí.",
+    "servicios, promociones y cómo apartar: las respuestas sobre los consultorios 50 Doctors en San Luis Potosí.",
     titular("Preguntas frecuentes", "Todo lo que nos preguntan los médicos",
-            "Ubicación, hospital, consultorios, preventa y cómo apartar, en respuestas cortas.",
+            "Ubicación, hospital, consultorios, promociones y cómo apartar, en respuestas cortas.",
             "torre-slp.webp", "Torre 50 Doctors SLP", 1600, 1313)
     + f"""
 <section class="seccion">
@@ -646,6 +747,11 @@ def construir() -> None:
         destino.parent.mkdir(parents=True, exist_ok=True)
         destino.write_text(pagina(ruta, titulo, desc, cuerpo, ld), encoding="utf-8")
         print("ok", ruta)
+    for vieja, nueva in REDIRECCIONES.items():
+        destino = RAIZ / vieja.strip("/") / "index.html"
+        destino.parent.mkdir(parents=True, exist_ok=True)
+        destino.write_text(_redireccion(nueva), encoding="utf-8")
+        print("ok", vieja, "->", nueva)
     # Noticias cambia sola (actualizar_noticias.py): su fecha es la de la
     # última noticia, para que Google vuelva a pasar cuando hay algo nuevo.
     ultima = max(

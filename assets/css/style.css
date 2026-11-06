@@ -310,3 +310,56 @@ section[id] { scroll-margin-top: 76px; }
 .faq summary::after { content: "+"; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: var(--azul); font-size: 1.4rem; font-weight: 600; }
 .faq[open] summary::after { content: "–"; }
 .faq p { padding: 0 18px 16px; margin: 0; color: var(--texto-suave); }
+
+/* ── Promoción vigente (CEO 2026-11-06) ─────────────────────────────── */
+.promo { background: linear-gradient(135deg, var(--azul-claro) 0%, var(--blanco) 70%); }
+.promo__fila { display: grid; grid-template-columns: minmax(0, 420px) 1fr; gap: 48px; align-items: center; }
+.promo__img { width: 100%; height: auto; border-radius: var(--radio); box-shadow: var(--sombra); }
+.promo__texto h2 { font-size: clamp(2rem, 4vw, 2.8rem); margin: .2em 0 .5em; color: var(--azul-oscuro); }
+.promo__planes { display: grid; gap: 10px; margin-bottom: 18px; }
+.promo__plan {
+  display: flex; align-items: center; gap: 18px;
+  background: var(--blanco); border: 2px solid var(--azul); border-radius: var(--radio);
+  padding: 14px 20px;
+}
+.promo__plan strong { font-family: Montserrat, sans-serif; font-weight: 800; font-size: clamp(2.4rem, 5vw, 3.4rem); color: var(--azul); line-height: 1; min-width: 2.6ch; }
+.promo__plan span { color: var(--texto-suave); }
+.promo__plan b { display: block; font-family: Montserrat, sans-serif; font-size: 1.3rem; color: var(--texto); }
+.promo__o { margin: 0; text-align: center; font-weight: 700; color: var(--azul-oscuro); }
+@media (max-width: 800px) {
+  .promo__fila { grid-template-columns: 1fr; gap: 28px; }
+  .promo__img { max-width: 420px; margin: 0 auto; }
+}
+
+/* El anuncio flotante, a la derecha en todas las páginas menos la de la
+   promo. En el móvil la imagen no se lee: una pastilla abajo a la izquierda
+   (a la derecha está el botón de WhatsApp). */
+.promo-flotante {
+  position: fixed; right: 18px; bottom: 92px; z-index: 29;
+  width: 180px; border-radius: 12px; background: var(--blanco);
+  box-shadow: 0 10px 30px rgba(18, 31, 92, .30);
+  animation: promo-entra .5s ease-out;
+}
+.promo-flotante[hidden] { display: none; }
+.promo-flotante a { display: block; color: inherit; text-decoration: none; }
+.promo-flotante__img { display: block; width: 100%; height: auto; border-radius: 12px; }
+.promo-flotante__movil { display: none; }
+.promo-flotante:hover { transform: translateY(-2px); }
+.promo-flotante__cerrar {
+  position: absolute; top: -10px; right: -10px;
+  width: 28px; height: 28px; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--azul-oscuro); color: var(--blanco); font-size: 18px; line-height: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+}
+@keyframes promo-entra { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: none; } }
+@media (max-height: 560px) and (min-width: 701px) { .promo-flotante { width: 130px; } }
+@media (max-width: 700px) {
+  .promo-flotante { width: auto; left: 12px; right: 88px; bottom: 22px; border-radius: 999px; background: var(--azul); }
+  .promo-flotante__img { display: none; }
+  .promo-flotante__movil {
+    display: block; padding: 13px 38px 13px 16px; color: var(--blanco);
+    font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .promo-flotante__cerrar { top: 50%; right: 8px; transform: translateY(-50%); background: rgba(255,255,255,.2); }
+}
+@media (prefers-reduced-motion: reduce) { .promo-flotante { animation: none; } }

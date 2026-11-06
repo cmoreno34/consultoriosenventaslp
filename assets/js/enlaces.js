@@ -84,3 +84,25 @@ document.querySelectorAll("[data-cita]").forEach(function (a) {
     navigator.sendBeacon(CRM, new Blob([datos], { type: "text/plain;charset=UTF-8" }));
   } catch (e) {}
 })();
+
+// Promoción vigente (CEO 2026-11-06). El anuncio flotante sale en todas las
+// páginas salvo la de la promo; se puede cerrar (hasta cerrar la pestaña) y
+// desaparece solo, con la sección destacada, al acabar la vigencia aunque nadie
+// vuelva a construir la web.
+(function () {
+  var ahora = Date.now();
+  document.querySelectorAll("[data-promo-hasta]").forEach(function (el) {
+    var fin = Date.parse(el.getAttribute("data-promo-hasta"));
+    if (fin && ahora >= fin) { el.remove(); return; }
+    if (!el.classList.contains("promo-flotante")) return;
+    var cerrada = false;
+    try { cerrada = sessionStorage.getItem("cv_promo_cerrada") === el.getAttribute("data-promo-hasta"); } catch (e) {}
+    if (cerrada) { el.remove(); return; }
+    el.hidden = false;
+    var x = el.querySelector(".promo-flotante__cerrar");
+    if (x) x.addEventListener("click", function () {
+      try { sessionStorage.setItem("cv_promo_cerrada", el.getAttribute("data-promo-hasta")); } catch (e) {}
+      el.remove();
+    });
+  });
+})();
