@@ -99,6 +99,11 @@ document.querySelectorAll("[data-cita]").forEach(function (a) {
     try { cerrada = sessionStorage.getItem("cv_promo_cerrada") === el.getAttribute("data-promo-hasta"); } catch (e) {}
     if (cerrada) { el.remove(); return; }
     el.hidden = false;
+    // Encogerlo al pasar la portada (no tapa las fotos de abajo).
+    var portada = document.querySelector(".portada");
+    var limite = portada ? portada.offsetHeight * 0.6 : 300;
+    var mini = function () { el.classList.toggle("promo-flotante--mini", window.scrollY > limite); };
+    window.addEventListener("scroll", mini, { passive: true }); mini();
     var x = el.querySelector(".promo-flotante__cerrar");
     if (x) x.addEventListener("click", function () {
       try { sessionStorage.setItem("cv_promo_cerrada", el.getAttribute("data-promo-hasta")); } catch (e) {}

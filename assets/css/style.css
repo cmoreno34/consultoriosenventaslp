@@ -357,7 +357,7 @@ section[id] { scroll-margin-top: 76px; }
 @media (min-width: 1100px) {
   .promo-flotante {
     top: 150px; bottom: auto;
-    right: max(24px, calc((100vw - 1160px) / 2 + 24px));
+    right: 16px;
     width: clamp(230px, 19vw, 280px);
   }
 }
@@ -373,3 +373,8 @@ section[id] { scroll-margin-top: 76px; }
   .promo-flotante__cerrar { top: 50%; right: 8px; transform: translateY(-50%); background: rgba(255,255,255,.2); }
 }
 @media (prefers-reduced-motion: reduce) { .promo-flotante { animation: none; } }
+/* Al bajar de la portada se encoge pegado al borde, para no tapar fotos
+   (CEO 2026-11-06). Arriba se ve grande. */
+.promo-flotante { transition: width .3s ease, top .3s ease; }
+@media (min-width: 701px) { .promo-flotante.promo-flotante--mini { width: 120px; } }
+@media (min-width: 1100px) { .promo-flotante.promo-flotante--mini { top: auto; bottom: 92px; } }
