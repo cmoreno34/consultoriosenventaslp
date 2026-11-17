@@ -635,6 +635,35 @@ def _noticias() -> str:
     return "\n    ".join(tarjetas)
 
 
+# Lo que han contado otros de la primera piedra (12-nov-2026): prensa y
+# cuentas oficiales. A mano, no lo trae el script de noticias. Titulares de
+# Líder Empresarial, CMIC y DIF sacados de la dirección (no se dejan leer).
+PRENSA = [
+    ("Líder Empresarial", "50 Doctors coloca la primera piedra en SLP: 192 consultorios",
+     "https://www.liderempresarial.com/50-doctors-coloca-primera-piedra-en-slp-192-consultorios-y-620-mdp-de-inversion/"),
+    ("Antena San Luis", "Galindo coloca primera piedra del hospital Fifty Doctors; destaca inversión privada en salud",
+     "https://antenasanluis.mx/galindo-primera-piedra-fifty-doctors/"),
+    ("El Momento", "Destaca Galindo inversión privada para fortalecer servicios de salud en SLP",
+     "https://periodicoelmomento.com/destaca-galindo-inversion-privada-para-fortalecer-servicios-de-salud-en-slp/"),
+    ("Desarrollo Económico SLP", "El Ayuntamiento, con el alcalde Enrique Galindo, en la primera piedra del hospital",
+     "https://www.facebook.com/DesarrolloEcoSL/posts/hoy-liderados-por-nuestro-alcalde-enrique-galindo-asistimos-a-la-colocaci%C3%B3n-de-l/1788655622786742/"),
+    ("CMIC San Luis Potosí", "La Cámara de la Construcción acompaña al alcalde en la colocación de la primera piedra",
+     "https://www.facebook.com/CMICSanLuis/posts/la-cmic-san-luis-potos%C3%AD-acompa%C3%B1%C3%B3-al-alcalde-enrique-galindo-ceballos-en-la-coloc/1531841098964823/"),
+    ("DIF Municipal SLP", "El DIF Municipal, en el arranque del hospital 50 Doctors",
+     "https://x.com/DIFMunicipalSLP/status/2121006784215499246"),
+    ("50 Doctors", "San Luis Potosí se suma a un nuevo capítulo en la historia de 50 Doctors",
+     "https://www.facebook.com/fiftydoctors/posts/%EF%B8%8F-san-luis-potos%C3%AD-se-suma-a-un-nuevo-cap%C3%ADtulo-en-la-historia-de-50-doctors-la-co/122212888550750331/"),
+]
+
+
+def _prensa() -> str:
+    import html
+    return "\n      ".join(
+        f"""<li><a href="{url}" target="_blank" rel="noopener"><span class="prensa__medio">{html.escape(medio)}</span>
+        <span class="prensa__titular">{html.escape(titular_)}</span></a></li>"""
+        for medio, titular_, url in PRENSA)
+
+
 PAGINAS["/noticias/"] = (
     "Noticias del hospital 50 Doctors San Luis Potosí · Avances y novedades",
     "Novedades del nuevo hospital 50 Doctors en San Luis Potosí: avances del proyecto, los consultorios en venta y las promociones.",
@@ -642,8 +671,19 @@ PAGINAS["/noticias/"] = (
             "Avances del proyecto, los consultorios y las promociones, tal como los contamos en nuestras redes.",
             "torre-slp.webp", "Torre 50 Doctors SLP", 1600, 1313)
     + f"""
+<section class="seccion seccion--gris" id="en-los-medios">
+  <div class="contenedor">
+    <p class="etiqueta">En los medios</p>
+    <h2>La primera piedra, contada por otros</h2>
+    <p>El 12 de noviembre de 2026 colocamos la primera piedra del hospital en Paseo de los Horizontes 500, con el alcalde Enrique Galindo. Esto es lo que publicaron la prensa y las instituciones que nos acompañaron.</p>
+    <ul class="prensa">
+      {_prensa()}
+    </ul>
+  </div>
+</section>
 <section class="seccion">
   <div class="contenedor">
+    <p class="etiqueta">En nuestras redes</p>
     <div class="noticias">
     {_noticias()}
     </div>

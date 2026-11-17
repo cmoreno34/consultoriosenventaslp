@@ -378,3 +378,12 @@ section[id] { scroll-margin-top: 76px; }
 .promo-flotante { transition: width .3s ease, top .3s ease; }
 @media (min-width: 701px) { .promo-flotante.promo-flotante--mini { width: 120px; } }
 @media (min-width: 1100px) { .promo-flotante.promo-flotante--mini { top: auto; bottom: 92px; } }
+
+/* En los medios (Noticias): enlaces a prensa e instituciones */
+.prensa { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 12px; }
+@media (min-width: 760px) { .prensa { grid-template-columns: 1fr 1fr; } }
+.prensa a { display: block; height: 100%; padding: 16px 20px; background: var(--blanco); border: 1px solid var(--borde); border-radius: var(--radio); text-decoration: none; color: var(--texto); transition: border-color .15s, transform .15s; }
+.prensa a:hover { border-color: var(--azul); transform: translateY(-1px); }
+.prensa__medio { display: block; font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; color: var(--azul); margin-bottom: .3em; }
+.prensa__titular { display: block; font-weight: 600; line-height: 1.35; }
+.prensa__titular::after { content: " ↗"; color: var(--azul); }
