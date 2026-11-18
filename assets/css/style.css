@@ -302,6 +302,10 @@ section[id] { scroll-margin-top: 76px; }
 .obra figure { margin: 0; background: var(--blanco); border-radius: var(--radio); overflow: hidden; box-shadow: var(--sombra); }
 .obra img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
 .obra figcaption { padding: 10px 14px 14px; font-size: .9rem; color: var(--texto-suave); }
+/* Video vertical de la obra (18-nov). */
+.obra-video { margin: 26px auto 0; max-width: 360px; background: var(--blanco); border-radius: var(--radio); overflow: hidden; box-shadow: var(--sombra); }
+.obra-video video { display: block; width: 100%; height: auto; aspect-ratio: 478 / 850; object-fit: cover; background: #000; }
+.obra-video figcaption { padding: 10px 14px 14px; font-size: .9rem; color: var(--texto-suave); text-align: center; }
 
 /* Preguntas frecuentes (12-oct). */
 .faq { background: var(--blanco); border: 1px solid var(--borde); border-radius: var(--radio); margin-bottom: 10px; box-shadow: var(--sombra); }
